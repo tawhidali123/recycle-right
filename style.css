@@ -250,3 +250,28 @@ canvas {
     max-width: 280px;
   }
 }
+
+.item.selected {
+  outline: 4px solid #2563eb;
+  background: #dbeafe;
+  transform: scale(1.05);
+}
+
+.bin {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .subtitle::after {
+    content: " On phones and tablets, tap an item and then tap a bin.";
+    display: block;
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: #2563eb;
+    font-weight: bold;
+  }
+
+  .item {
+    cursor: pointer;
+  }
+}

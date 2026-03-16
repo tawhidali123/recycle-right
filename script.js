@@ -58,6 +58,8 @@ const originalItems = [
 let items = [];
 let correctCount = 0;
 let wrongCount = 0;
+let selectedItemIndex = null;
+
 const totalItems = originalItems.length;
 
 const itemsDiv = document.getElementById("items");
@@ -73,14 +75,22 @@ function copyItems() {
   return originalItems.map(item => ({ ...item }));
 }
 
+function isMobileLike() {
+  return window.innerWidth <= 768 || "ontouchstart" in window;
+}
+
 function renderItems() {
   itemsDiv.innerHTML = "";
 
   items.forEach((item, index) => {
     const div = document.createElement("div");
     div.className = "item";
-    div.draggable = true;
+    div.draggable = !isMobileLike();
     div.dataset.index = index;
+
+    if (selectedItemIndex === index) {
+      div.classList.add("selected");
+    }
 
     div.innerHTML = `
       <div class="item-emoji">${item.emoji}</div>
@@ -94,6 +104,20 @@ function renderItems() {
 
     div.addEventListener("dragend", () => {
       div.classList.remove("dragging");
+    });
+
+    div.addEventListener("click", () => {
+      if (!isMobileLike()) return;
+
+      if (selectedItemIndex === index) {
+        selectedItemIndex = null;
+        factDiv.textContent = "Item unselected. Tap an item, then tap a bin.";
+      } else {
+        selectedItemIndex = index;
+        factDiv.textContent = `Selected: ${item.name}. Now tap a bin.`;
+      }
+
+      renderItems();
     });
 
     itemsDiv.appendChild(div);
@@ -118,6 +142,13 @@ function updateScoreboard() {
 
 function removeItem(index) {
   items.splice(index, 1);
+
+  if (selectedItemIndex === index) {
+    selectedItemIndex = null;
+  } else if (selectedItemIndex !== null && selectedItemIndex > index) {
+    selectedItemIndex--;
+  }
+
   renderItems();
 }
 
@@ -128,8 +159,28 @@ function flashBin(bin, className) {
   }, 350);
 }
 
+function handleDropOrTap(binType, binElement, itemIndex) {
+  const item = items[itemIndex];
+  if (!item) return;
+
+  if (item.type === binType) {
+    correctCount++;
+    factDiv.textContent = `✅ Correct! ${item.name}: ${item.fact}`;
+    flashBin(binElement, "correct-flash");
+    confetti();
+    removeItem(itemIndex);
+  } else {
+    wrongCount++;
+    factDiv.textContent = `❌ Not quite. ${item.name} does not go in the ${binType} bin.`;
+    flashBin(binElement, "wrong-flash");
+  }
+
+  updateScoreboard();
+}
+
 document.querySelectorAll(".bin").forEach((bin) => {
   bin.addEventListener("dragover", (e) => {
+    if (isMobileLike()) return;
     e.preventDefault();
     bin.classList.add("hovered");
   });
@@ -139,27 +190,22 @@ document.querySelectorAll(".bin").forEach((bin) => {
   });
 
   bin.addEventListener("drop", (e) => {
+    if (isMobileLike()) return;
     e.preventDefault();
     bin.classList.remove("hovered");
 
     const index = Number(e.dataTransfer.getData("text/plain"));
-    const item = items[index];
+    handleDropOrTap(bin.dataset.type, bin, index);
+  });
 
-    if (!item) return;
-
-    if (item.type === bin.dataset.type) {
-      correctCount++;
-      factDiv.textContent = `✅ Correct! ${item.name}: ${item.fact}`;
-      flashBin(bin, "correct-flash");
-      confetti();
-      removeItem(index);
-    } else {
-      wrongCount++;
-      factDiv.textContent = `❌ Not quite. ${item.name} does not go in the ${bin.dataset.type} bin.`;
-      flashBin(bin, "wrong-flash");
+  bin.addEventListener("click", () => {
+    if (!isMobileLike()) return;
+    if (selectedItemIndex === null) {
+      factDiv.textContent = "Tap an item first, then tap a bin.";
+      return;
     }
 
-    updateScoreboard();
+    handleDropOrTap(bin.dataset.type, bin, selectedItemIndex);
   });
 });
 
@@ -169,7 +215,10 @@ function resetGame() {
   items = copyItems();
   correctCount = 0;
   wrongCount = 0;
-  factDiv.textContent = "Match the items to the correct bins.";
+  selectedItemIndex = null;
+  factDiv.textContent = isMobileLike()
+    ? "Tap an item, then tap the correct bin."
+    : "Match the items to the correct bins.";
   progressFillEl.style.width = "0%";
   gameOverEl.classList.add("hidden");
   renderItems();
@@ -186,7 +235,10 @@ function resizeCanvas() {
 }
 
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  renderItems();
+});
 
 function createConfetti() {
   for (let i = 0; i < 120; i++) {
