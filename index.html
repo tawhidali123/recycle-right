@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recycle Right Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+
+  <div class="container">
+    <h1>♻️ Recycle Right</h1>
+    <h3>Made by Zayn Ali</h3>
+    <p class="subtitle">Drag each item into the correct bin!</p>
+
+    <div class="scoreboard">
+      <div class="score-card correct-card">
+        <span class="score-label">Correct</span>
+        <span id="correct-score" class="score-number">0</span>
+      </div>
+
+      <div class="score-card wrong-card">
+        <span class="score-label">Wrong</span>
+        <span id="wrong-score" class="score-number">0</span>
+      </div>
+
+      <div class="score-card total-card">
+        <span class="score-label">Progress</span>
+        <span id="progress-text" class="score-number">0 / 9</span>
+      </div>
+    </div>
+
+    <div class="progress-wrapper">
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="fact" class="fact-box">Match the items to the correct bins.</div>
+
+    <div id="items" class="items"></div>
+
+    <div id="game-over" class="game-over hidden">
+      <h2>🎉 Game Over!</h2>
+      <p>You sorted all the items.</p>
+      <button id="play-again-btn" class="play-again-btn">Play Again</button>
+    </div>
+
+    <div class="bins">
+      <div class="bin" data-type="recycle">
+        <div class="bin-emoji">♻️</div>
+        <h2>Recycle</h2>
+        <p>Paper, cans, bottles</p>
+      </div>
+
+      <div class="bin" data-type="trash">
+        <div class="bin-emoji">🗑️</div>
+        <h2>Trash</h2>
+        <p>Waste that cannot be recycled</p>
+      </div>
+
+      <div class="bin" data-type="compost">
+        <div class="bin-emoji">🌱</div>
+        <h2>Compost</h2>
+        <p>Food scraps and plant waste</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

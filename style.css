@@ -1,0 +1,252 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #f4fbf4, #e8f6e8);
+  color: #1f2937;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  position: relative;
+  z-index: 2;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 2.5rem;
+}
+
+.subtitle {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: #4b5563;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.score-card {
+  min-width: 140px;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.score-label {
+  display: block;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.score-number {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.correct-card .score-number {
+  color: #15803d;
+}
+
+.wrong-card .score-number {
+  color: #b91c1c;
+}
+
+.total-card .score-number {
+  color: #1d4ed8;
+}
+
+.progress-wrapper {
+  margin: 10px auto 20px;
+  max-width: 700px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 24px;
+  background: #d1d5db;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(to right, #22c55e, #16a34a);
+  transition: width 0.35s ease;
+}
+
+.fact-box {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  padding: 14px 18px;
+  background: #ffffff;
+  border-left: 6px solid #22c55e;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #14532d;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.items {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0 34px;
+}
+
+.item {
+  width: 140px;
+  min-height: 130px;
+  background: white;
+  border: 2px solid #d1d5db;
+  border-radius: 16px;
+  padding: 12px 10px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.12);
+}
+
+.item.dragging {
+  opacity: 0.6;
+  transform: scale(1.04);
+}
+
+.item-emoji {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.item-name {
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.bins {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.bin {
+  width: 220px;
+  min-height: 180px;
+  background: white;
+  border: 3px dashed #6b7280;
+  border-radius: 20px;
+  padding: 18px 14px;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.bin h2 {
+  margin: 8px 0 6px;
+}
+
+.bin p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.bin-emoji {
+  font-size: 3rem;
+}
+
+.bin.hovered {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  transform: scale(1.03);
+}
+
+.bin.correct-flash {
+  background: #dcfce7;
+  border-color: #15803d;
+}
+
+.bin.wrong-flash {
+  background: #fee2e2;
+  border-color: #b91c1c;
+}
+
+.game-over {
+  margin: 24px auto 32px;
+  padding: 24px 18px;
+  max-width: 420px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.game-over h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.play-again-btn {
+  border: none;
+  background: #16a34a;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.play-again-btn:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+.hidden {
+  display: none;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .item {
+    width: 120px;
+    min-height: 120px;
+  }
+
+  .bin {
+    width: 100%;
+    max-width: 280px;
+  }
+}
